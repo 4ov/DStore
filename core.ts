@@ -6,8 +6,7 @@ import { existsSync } from 'https://deno.land/std@0.79.0/fs/exists.ts'
 
 
 
-
-export default class Score{
+export default class DStore{
     private file : string
     private data : any
     constructor(file : string){
@@ -20,17 +19,27 @@ export default class Score{
         this.data = cat(()=>readJson(this.file)) || {}
     }
 
+    
     save(){
         writeJson(this.file, this.data)
     }
-
+    /**
+         * Gets a value from db
+         * @param {string | object} path
+         * @returns {any} 
+    */
     get(path : string | object){
         if(path instanceof Array)return path.map(p=>_.get(this.data, p, undefined))
         else return _.get(this.data, path, undefined)
     }
 
-    set(path : string, data : any, override=true){
-            override ? _.set(this.data, path, data) : ''
+    /**
+         * Sets a value in db
+         * @param {string | object} path
+         * @returns {number} Sum of x and y
+    */
+    set(path : string, data : any){
+            _.set(this.data, path, data)
             // _.set(this.data, path, data)
         return this
     }
